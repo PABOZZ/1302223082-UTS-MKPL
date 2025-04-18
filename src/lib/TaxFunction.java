@@ -18,6 +18,7 @@ public class TaxFunction {
 	public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
 		
 		int tax = 0;
+                int nonTaxableIncome = 54000000;
 		
 		if (numberOfMonthWorking > 12) {
 			System.err.println("More than 12 month working per year");
@@ -28,10 +29,13 @@ public class TaxFunction {
 		}
 		
 		if (isMarried) {
-			tax = (int) Math.round(0.05 * (((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - (54000000 + 4500000 + (numberOfChildren * 1500000))));
-		}else {
-			tax = (int) Math.round(0.05 * (((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - 54000000));
-		}
+                    nonTaxableIncome += 4500000; // Menambahkan tambahan untuk menikah
+                }
+
+                nonTaxableIncome += Math.min(numberOfChildren, 3) * 1500000; // Menambahkan tambahan untuk anak
+
+// Hitung pajak sekali
+                tax = (int) Math.round(0.05 * (((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - nonTaxableIncome)); 
 		
 		if (tax < 0) {
 			return 0;
